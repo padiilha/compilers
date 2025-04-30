@@ -1,32 +1,40 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <cctype>
-#include <stdio.h>
 
-struct Token {
-  std::string type;
-  std::string value;
-};
+#include "InputBuffer.hh"
+#include "Lexer.hh"
+#include "Token.hh"
 
-unordered_map<string, string> simbolsTable = {
-  {"if", "keyword"},
-  {"else", "keyword"},
-  {"while", "keyword"},
-  {"return", "keyword"},
-};
-
-vector<Token> lexer(const string& input) {
-  vector<Token> tokens;
-  size_t pos = 0;
-  size_t len = input.length();
-
-  while(pos < len) {
-    
+int main(int argc, char* argv[]) {
+  if (argc != 2) {
+    std::cerr << "Uso: " << argv[0] << " <arquivo_de_entrada.txt>" << std::endl;
+    return 1;
   }
-}
 
-int main() {
+  std::ifstream file(argv[1]);
+  if (!file.is_open()) {
+    std::cerr << "Erro ao abrir o arquivo: " << argv[1] << std::endl;
+    return 1;
+  }
+
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+  std::string input = buffer.str();
+
+  InputBuffer inputBuffer(input);
+  Lexer lexer(inputBuffer);
+  lexer.scan();
+
+  std::vector<Token*> tokens = lexer.getTokens();
+  for (Token* token : tokens) {
+    std::cout << "Lista de Tokens:" << std::endl;
+    std::cout << "Token: " << token->getType() << ", Lexema: " << token->getLexeme() << std::endl;
+  }
+
+  lexer.printSymbolTable();
+
   return 0;
 }

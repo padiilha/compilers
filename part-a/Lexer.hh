@@ -3,25 +3,31 @@
 
 #include <iostream>
 #include <map>
+#include <set>
+#include <sstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
+#include "ErrorToken.hh"
 #include "InputBuffer.hh"
 #include "Token.hh"
-#include "Word.hh"
 
 class Lexer {
   private:
     InputBuffer& input;
     std::vector<Token*> tokens;
-    std::map<std::string, Word*> symbolTable;
-    Token* simulateIdDFA();
-    Token* simulateNumDFA();
+    std::map<std::string, Token*> words;
+    std::set<Token*> keywords;
+    char ch;
     Token* simulateRelopDFA();
+    Token* simulateNumDFA();
+    Token* simulateIdDFA();
+    Token* simulateUnknownDFA();
     void reserveKeywords();
   public:
     Lexer(InputBuffer& input);
-    void scan();
+    Token* scan();
     std::vector<Token*> getTokens() const;
     void printSymbolTable();
 };

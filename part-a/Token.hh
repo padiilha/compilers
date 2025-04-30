@@ -6,10 +6,11 @@
 class Token {
   protected:
     std::string type;
+    std::string lexeme;
   public:
-    Token(const std::string& type);
-    virtual ~Token() = default;
+    Token(const std::string& type, const std::string& lexeme);
     std::string getType() const;
+    std::string getLexeme() const;
 };
 
 #endif
