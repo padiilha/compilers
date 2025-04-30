@@ -1,0 +1,6 @@
+def f(int x, int y) {
+  int resultado;
+  resultado = x + y;
+  print resultado;
+  return resultado;
+}

@@ -8,5 +8,8 @@
 !*.hh
 !*.txt
 
+!*.l
+!*.lsi
+
 !makefile
 !README.md
