@@ -1,0 +1,157 @@
+MAIN ::= STMT
+MAIN ::= FLIST
+MAIN ::= ''
+
+// fatorando FDEF à esquerda
+
+// FLIST ::= FDEF FLIST
+// FLIST ::= FDEF
+
+FLIST ::= FDEF FLIST'
+
+FLIST' ::= FLIST
+FLIST' ::= ''
+
+FDEF ::= def id ( PARLIST ) { STMTLIST }
+
+// fatorando int id à esquerda
+
+// PARLIST ::= int id , PARLIST
+// PARLIST ::= int id
+// PARLIST ::= ''
+
+PARLIST ::= int id PARLIST'
+PARLIST ::= ''
+
+PARLIST' ::= , PARLIST
+PARLIST' ::= ''
+
+// fatorando id à esquerda
+
+// VARLIST ::= id, VARLIST
+// VARLIST ::= id
+
+VARLIST ::= id VARLIST'
+
+VARLIST' ::= , VARLIST
+VARLIST' ::= ''
+
+STMT ::= int VARLIST ;
+STMT ::= ATRIBST ;
+STMT ::= PRINTST ;
+STMT ::= RETURNST ;
+STMT ::= IFSTMT
+STMT ::= { STMTLIST }
+STMT ::= ;
+
+// fatorando id = à esquerda
+
+// ATRIBST ::= id = EXPR
+// ATRIBST ::= id = FCALL
+
+// ATRIBST ::= id = ATRIBST'
+
+// ATRIBST' ::= EXPR
+// ATRIBST' ::= FCALL
+
+ATRIBST ::= id = ATRIBVAL
+
+ATRIBVAL ::= id ATRIBVAL'
+ATRIBVAL ::= num NUMEXPR' EXPR'
+ATRIBVAL ::= ( NUMEXPR ) NUMEXPR' EXPR'
+
+ATRIBVAL' ::= ( PARLISTCALL )
+ATRIBVAL' ::= TERM' NUMEXPR' EXPR'
+
+// FCALL ::= id ( PARLISTCALL )
+
+// fatorando id à esquerda
+
+// PARLISTCALL ::= id , PARLISTCALL
+// PARLISTCALL ::= id
+// PARLISTCALL ::= ''
+
+PARLISTCALL ::= id PARLISTCALL'
+PARLISTCALL ::= ''
+
+PARLISTCALL' ::= , PARLISTCALL
+
+PRINTST ::= print EXPR
+
+// fatorando return à esquerda
+
+// RETURNST ::= return id
+// RETURNST ::= return
+
+RETURNST ::= return RETURNST'
+
+RETURNST' ::= id
+RETURNST' ::= ''
+
+// fatorando if ( EXPR ) { STMT } à esquerda
+
+// IFSTMT ::= if ( EXPR ) { STMT } else { STMT }
+// IFSTMT ::= if ( EXPR ) { STMT }
+
+IFSTMT ::= if ( EXPR ) { STMT } IFSTMT'
+
+IFSTMT' ::= else { STMT }
+IFSTMT' ::= ''
+
+// fatorando STMT à esquerda
+
+// STMTLIST ::= STMT STMTLIST
+// STMTLIST ::= STMT
+
+STMTLIST ::= STMT STMTLIST'
+
+STMTLIST' ::= STMTLIST
+STMTLIST' ::= ''
+
+// fatorando NUMEXPR à esquerda
+
+// EXPR ::= NUMEXPR < NUMEXPR
+// EXPR ::= NUMEXPR <= NUMEXPR
+// EXPR ::= NUMEXPR > NUMEXPR
+// EXPR ::= NUMEXPR >= NUMEXPR
+// EXPR ::= NUMEXPR == NUMEXPR
+// EXPR ::= NUMEXPR != NUMEXPR
+// EXPR ::= NUMEXPR
+
+EXPR ::= NUMEXPR EXPR'
+
+EXPR' ::= < NUMEXPR
+EXPR' ::= <= NUMEXPR
+EXPR' ::= > NUMEXPR
+EXPR' ::= >= NUMEXPR
+EXPR' ::= == NUMEXPR
+EXPR' ::= != NUMEXPR
+EXPR' ::= ''
+
+// eliminando recursão à esquerda criando novo não-terminal NUMEXPR'
+
+// NUMEXPR ::= NUMEXPR + TERM
+// NUMEXPR ::= NUMEXPR - TERM
+// NUMEXPR ::= TERM
+
+NUMEXPR ::= TERM NUMEXPR'
+
+NUMEXPR' ::= + TERM NUMEXPR'
+NUMEXPR' ::= - TERM NUMEXPR'
+NUMEXPR' ::= ''
+
+// eliminando recursão à esquerda criando novo não-terminal TERM'
+
+// TERM ::= TERM * FACTOR
+// TERM ::= TERM / FACTOR
+// TERM ::= FACTOR
+
+TERM ::= FACTOR TERM'
+
+TERM' ::= * FACTOR TERM'
+TERM' ::= / FACTOR TERM'
+TERM' ::= ''
+
+FACTOR ::= num
+FACTOR ::= ( NUMEXPR )
+FACTOR ::= id
